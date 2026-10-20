@@ -5,22 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Lingkar Bertumbuh - Aplikasi Mutabaah & Mentoring</title>
 
-  <!-- Optimization for Mobile & PWA (Bisa di-install sebagai APK) -->
   <meta name="theme-color" content="#030712">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-  <!-- Security & Antivirus Headers -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <!-- Google Fonts: Plus Jakarta Sans -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <!-- Canvas Confetti CDN -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <script>
@@ -28,11 +21,7 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-          colors: {
-            brand: {
-              400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857'
-            }
-          }
+          colors: { brand: { 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857' } }
         }
       }
     }
@@ -46,21 +35,16 @@
     .glass-input:focus { border-color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
     .glow-gold { box-shadow: 0 0 30px -5px rgba(245, 158, 11, 0.35); }
     .glow-emerald { box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.35); }
-    .glow-cyan { box-shadow: 0 10px 30px -5px rgba(6, 182, 212, 0.35); }
   </style>
 </head>
 <body class="text-slate-100 min-h-screen pb-28 relative selection:bg-brand-500 selection:text-white">
 
-  <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="fixed top-5 right-4 left-4 md:left-auto md:w-96 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
-  <!-- HEADER NAVBAR -->
   <header class="sticky top-0 z-40 glass-card border-b border-white/10 text-white">
     <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
       <div class="flex items-center gap-3">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center font-black text-xl shadow-lg glow-emerald border border-brand-400/40 shrink-0">
-          🌱
-        </div>
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center font-black text-xl shadow-lg glow-emerald border border-brand-400/40 shrink-0">🌱</div>
         <div class="truncate">
           <h1 class="font-black text-base md:text-lg leading-tight truncate text-slate-100 tracking-tight">Lingkar Bertumbuh</h1>
           <p class="text-[11px] text-slate-400 truncate flex items-center gap-1.5 font-medium">
@@ -70,81 +54,57 @@
       </div>
       
       <div class="flex items-center gap-2">
-        <span id="roleBadge" class="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-extrabold px-3 py-1.5 rounded-xl bg-slate-900 text-slate-300 border border-slate-700">
-          👤 Anggota
-        </span>
+        <span id="roleBadge" class="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-extrabold px-3 py-1.5 rounded-xl bg-slate-900 text-slate-300 border border-slate-700">👤 Anggota</span>
         <button onclick="handleAdminToggle()" id="btnSwitchAdmin" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl shadow-lg glow-gold transition flex items-center gap-1.5 cursor-pointer">
           <i class="fa-solid fa-shield-halved text-xs"></i> <span id="btnAdminText">Admin</span>
         </button>
       </div>
     </div>
 
-    <!-- TABS NAVIGATION -->
     <div class="bg-slate-950/90 border-t border-white/5">
       <div class="max-w-4xl mx-auto px-2 flex overflow-x-auto text-xs font-bold text-slate-400 no-scrollbar">
-        <button onclick="switchTab('tabLeaderboard')" id="nav-tabLeaderboard" class="nav-tab px-4 py-3 border-b-2 border-brand-500 text-white flex items-center gap-2 whitespace-nowrap transition-all">
-          <i class="fa-solid fa-trophy text-amber-400"></i> Leaderboard
-        </button>
-        <button onclick="switchTab('tabForm')" id="nav-tabForm" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all">
-          <i class="fa-solid fa-pen-to-square text-brand-400"></i> Input Mutabaah
-        </button>
-        <button onclick="switchTab('tabEvents')" id="nav-tabEvents" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all">
-          <i class="fa-solid fa-calendar-star text-amber-300"></i> Event Liqo
-        </button>
-        <button onclick="switchTab('tabAI')" id="nav-tabAI" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all">
-          <i class="fa-solid fa-robot text-cyan-400"></i> AI Mentoring
-        </button>
-        <button onclick="switchTab('tabAdmin')" id="nav-tabAdmin" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all hidden admin-only">
-          <i class="fa-solid fa-sliders text-amber-400"></i> Panel Admin
-        </button>
+        <button onclick="switchTab('tabLeaderboard')" id="nav-tabLeaderboard" class="nav-tab px-4 py-3 border-b-2 border-brand-500 text-white flex items-center gap-2 whitespace-nowrap transition-all"><i class="fa-solid fa-trophy text-amber-400"></i> Leaderboard</button>
+        <button onclick="switchTab('tabForm')" id="nav-tabForm" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all"><i class="fa-solid fa-pen-to-square text-brand-400"></i> Input Mutabaah</button>
+        <button onclick="switchTab('tabEvents')" id="nav-tabEvents" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all"><i class="fa-solid fa-calendar-star text-amber-300"></i> Event Liqo</button>
+        <button onclick="switchTab('tabAI')" id="nav-tabAI" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all"><i class="fa-solid fa-robot text-cyan-400"></i> AI Mentoring</button>
+        <button onclick="switchTab('tabAdmin')" id="nav-tabAdmin" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all hidden admin-only"><i class="fa-solid fa-sliders text-amber-400"></i> Panel Admin</button>
       </div>
     </div>
   </header>
 
   <main class="max-w-4xl mx-auto px-4 mt-5 space-y-6">
 
-    <!-- SECURITY & STORAGE STATUS BAR -->
     <div class="p-3.5 glass-card rounded-2xl shadow-xl flex items-center justify-between gap-3 text-xs">
       <div class="flex items-center gap-2.5 text-slate-300 font-semibold truncate">
         <span class="relative flex h-2.5 w-2.5 shrink-0">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
         </span>
-        <span class="truncate text-slate-200">Sistem Internal Storage: <span class="text-brand-400 font-bold">Aktif & Aman dari Virus</span></span>
+        <span class="truncate text-slate-200">Sistem Internal Storage: <span class="text-brand-400 font-bold">Aktif & Aman</span></span>
       </div>
-      <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-3 py-1 rounded-xl border border-emerald-500/20 font-bold shrink-0">Auto-Encrypted</span>
+      <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-3 py-1 rounded-xl border border-emerald-500/20 font-bold shrink-0">Auto-Save</span>
     </div>
 
-    <!-- ================= TAB 1: KLASEMEN LEADERBOARD & PODIUM ================= -->
+    <!-- TAB 1: KLASEMEN -->
     <section id="tabLeaderboard" class="tab-content space-y-6">
       <div class="glass-card p-5 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden">
-        
         <div class="text-center max-w-md mx-auto mb-8">
-          <span class="bg-amber-500/10 text-amber-400 text-[11px] font-black px-4 py-1.5 rounded-full border border-amber-500/20 inline-block mb-2 uppercase tracking-wider">
-            ✨ Fastabiqul Khairat
-          </span>
+          <span class="bg-amber-500/10 text-amber-400 text-[11px] font-black px-4 py-1.5 rounded-full border border-amber-500/20 inline-block mb-2 uppercase tracking-wider">✨ Fastabiqul Khairat</span>
           <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">Klasemen Pekanan</h2>
           <p class="text-xs text-slate-400 mt-1.5 font-medium">Peringkat Amalan Yaumiyah & Presensi Lingkar Bertumbuh</p>
         </div>
-
-        <!-- PODIUM TOP 3 -->
         <div id="podiumSection" class="grid grid-cols-3 gap-2.5 md:gap-5 mb-8 items-end min-h-[200px]"></div>
-
-        <!-- BADGES LEGEND -->
         <div class="p-3.5 glass-input rounded-2xl mb-6 flex flex-wrap items-center justify-center gap-2.5 text-[10px] font-extrabold text-slate-300">
           <span class="flex items-center gap-1 bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2.5 py-1 rounded-xl">🌟 Istiqomah (&gt;100pt)</span>
           <span class="flex items-center gap-1 bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-2.5 py-1 rounded-xl">🕌 Pejuang Masjid</span>
           <span class="flex items-center gap-1 bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 px-2.5 py-1 rounded-xl">📖 Hafiz ½ Juz</span>
         </div>
-
-        <!-- RANKINGS LIST -->
         <div class="space-y-3" id="rankingList"></div>
       </div>
     </section>
 
-    <!-- ================= TAB 2: INPUT MUTABAAH YAUMI & ABSENSI ================= -->
+    <!-- TAB 2: INPUT MUTABAAH -->
     <section id="tabForm" class="tab-content hidden space-y-5">
-      
       <div class="glass-card p-5 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="w-full md:w-2/3 space-y-1.5">
           <label class="block text-[11px] font-black uppercase tracking-wider text-brand-400">Nama Lengkap Anggota:</label>
@@ -157,30 +117,24 @@
       </div>
 
       <form id="mutabaahForm" onsubmit="saveMutabaah(event)" class="space-y-5">
-        
-        <!-- ABSENSI MENTORING -->
         <div class="glass-card p-5 md:p-6 rounded-3xl shadow-xl space-y-4 border-l-4 border-l-cyan-500">
           <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
-            <h3 class="font-black text-slate-100 text-sm flex items-center gap-2">
-              <i class="fa-solid fa-users text-cyan-400"></i> Absensi Mentoring Pekanan
-            </h3>
+            <h3 class="font-black text-slate-100 text-sm flex items-center gap-2"><i class="fa-solid fa-users text-cyan-400"></i> Absensi Mentoring Pekanan</h3>
             <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">Wajib Isi</span>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 glass-input rounded-2xl space-y-2">
               <label class="font-bold text-xs text-slate-200 block">Pilih Pekan Mentoring:</label>
-              <select id="inputPekan" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs font-bold text-slate-100 outline-none cursor-pointer">
+              <select id="inputPekan" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs font-bold text-slate-100 outline-none">
                 <option value="Pekan 1">Pekan 1</option>
                 <option value="Pekan 2">Pekan 2</option>
                 <option value="Pekan 3">Pekan 3</option>
                 <option value="Pekan 4">Pekan 4</option>
               </select>
             </div>
-
             <div class="p-4 glass-input rounded-2xl space-y-2">
               <label class="font-bold text-xs text-slate-200 block">Status Kehadiran Mentoring:</label>
-              <select id="statusMentoring" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs font-bold text-slate-100 outline-none cursor-pointer">
+              <select id="statusMentoring" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs font-bold text-slate-100 outline-none">
                 <option value="Hadir">✅ Hadir Mentoring (+20 pt)</option>
                 <option value="Izin">🟡 Izin Syar'i (+10 pt)</option>
                 <option value="Alfa">❌ Alfa (0 pt)</option>
@@ -189,100 +143,77 @@
           </div>
         </div>
 
-        <!-- TARGET AMALAN YAUMIYAH -->
         <div class="glass-card p-5 md:p-6 rounded-3xl shadow-xl space-y-4">
           <div class="border-b border-slate-800 pb-3">
-            <h3 class="font-black text-slate-100 text-sm flex items-center gap-2">
-              <i class="fa-solid fa-kaaba text-brand-400"></i> Amalan Yaumiyah Pekanan
-            </h3>
+            <h3 class="font-black text-slate-100 text-sm flex items-center gap-2"><i class="fa-solid fa-kaaba text-brand-400"></i> Amalan Yaumiyah Pekanan</h3>
           </div>
-
-          <!-- Tilawah 1/2 Juz Perhari -->
           <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
               <p class="font-bold text-sm text-slate-100">📖 Tilawah Al-Qur'an <span class="text-xs font-semibold text-brand-400">(+20 pt/juz)</span></p>
               <p class="text-[11px] text-slate-400">Target Min: ½ Juz / hari (3.5 Juz / pekan)</p>
             </div>
             <div class="flex items-center gap-2">
-              <input type="number" step="0.5" id="tilawahJuz" placeholder="0" min="0" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <input type="number" step="0.5" id="tilawahJuz" placeholder="0" min="0" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none">
               <span class="text-xs font-bold text-slate-400">Juz</span>
             </div>
           </div>
-
-          <!-- Shalat 5 Waktu -->
           <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
               <p class="font-bold text-sm text-slate-100">🕌 Shalat 5 Waktu Jamaah <span class="text-xs font-semibold text-brand-400">(+2 pt/waktu)</span></p>
               <p class="text-[11px] text-slate-400">Target: 35 Waktu / pekan</p>
             </div>
             <div class="flex items-center gap-2">
-              <input type="number" id="sholat5Waktu" placeholder="0" min="0" max="35" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <input type="number" id="sholat5Waktu" placeholder="0" min="0" max="35" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none">
               <span class="text-xs font-bold text-slate-400">Waktu</span>
             </div>
           </div>
-
-          <!-- Qobliyah & Ba'diyah -->
           <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
-              <p class="font-bold text-sm text-slate-100">✨ Shalat Sunnah Qobliyah & Ba'diyah <span class="text-xs font-semibold text-brand-400">(+5 pt/hari)</span></p>
-              <p class="text-[11px] text-slate-400">Shalat sunnah rawatib harian</p>
+              <p class="font-bold text-sm text-slate-100">✨ Sunnah Qobliyah & Ba'diyah <span class="text-xs font-semibold text-brand-400">(+5 pt/hari)</span></p>
             </div>
             <div class="flex items-center gap-2">
-              <input type="number" id="rawatibHari" placeholder="0" min="0" max="7" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <input type="number" id="rawatibHari" placeholder="0" min="0" max="7" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none">
               <span class="text-xs font-bold text-slate-400">Hari</span>
             </div>
           </div>
-
-          <!-- Tahajud 1x -->
           <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
-              <p class="font-bold text-sm text-slate-100">🌙 Shalat Tahajud (Minimal 1x Pekan Ini) <span class="text-xs font-semibold text-brand-400">(+15 pt/hari)</span></p>
+              <p class="font-bold text-sm text-slate-100">🌙 Shalat Tahajud (Min 1x Pekan Ini) <span class="text-xs font-semibold text-brand-400">(+15 pt/hari)</span></p>
             </div>
             <div class="flex items-center gap-2">
-              <input type="number" id="tahajudHari" placeholder="0" min="0" max="7" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <input type="number" id="tahajudHari" placeholder="0" min="0" max="7" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none">
               <span class="text-xs font-bold text-slate-400">Hari</span>
             </div>
           </div>
-
-          <!-- Dhuha 2x -->
           <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
             <div>
-              <p class="font-bold text-sm text-slate-100">☀️ Shalat Dhuha (Minimal 2x Pekan Ini) <span class="text-xs font-semibold text-brand-400">(+10 pt/hari)</span></p>
+              <p class="font-bold text-sm text-slate-100">☀️ Shalat Dhuha (Min 2x Pekan Ini) <span class="text-xs font-semibold text-brand-400">(+10 pt/hari)</span></p>
             </div>
             <div class="flex items-center gap-2">
-              <input type="number" id="dhuhaHari" placeholder="0" min="0" max="7" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <input type="number" id="dhuhaHari" placeholder="0" min="0" max="7" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none">
               <span class="text-xs font-bold text-slate-400">Hari</span>
             </div>
           </div>
         </div>
 
-        <button type="submit" id="btnSaveMutabaah" class="w-full bg-gradient-to-r from-brand-600 via-emerald-500 to-teal-400 hover:opacity-95 active:scale-[0.98] text-slate-950 font-black py-4 px-6 rounded-2xl shadow-xl glow-emerald transition flex items-center justify-center gap-2 text-sm cursor-pointer">
+        <button type="submit" id="btnSaveMutabaah" class="w-full bg-gradient-to-r from-brand-600 via-emerald-500 to-teal-400 text-slate-950 font-black py-4 px-6 rounded-2xl shadow-xl glow-emerald transition flex items-center justify-center gap-2 text-sm">
           <i class="fa-solid fa-cloud-arrow-up text-lg"></i> Simpan Mutabaah Pekan Ini
         </button>
-
       </form>
     </section>
 
-    <!-- ================= TAB 3: KELOLA EVENT LIQO ================= -->
+    <!-- TAB 3: EVENT LIQO -->
     <section id="tabEvents" class="tab-content hidden space-y-5">
       <div class="glass-card p-6 rounded-3xl space-y-4">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-          <div>
-            <h3 class="font-black text-sm text-amber-300 flex items-center gap-2">
-              <i class="fa-solid fa-bullhorn text-amber-400"></i> Jadwal & Event Liqo
-            </h3>
-            <p class="text-[11px] text-slate-400">Pengumuman agenda kegiatan Lingkar Bertumbuh</p>
-          </div>
+        <div class="border-b border-slate-800 pb-3">
+          <h3 class="font-black text-sm text-amber-300 flex items-center gap-2"><i class="fa-solid fa-bullhorn text-amber-400"></i> Jadwal & Event Liqo</h3>
+          <p class="text-[11px] text-slate-400">Pengumuman agenda kegiatan Lingkar Bertumbuh</p>
         </div>
-
-        <!-- LIST EVENT HASIL ADD ADMIN -->
-        <div id="eventsContainer" class="space-y-3">
-          <p class="text-center text-xs text-slate-500 py-6">Belum ada event mendatang.</p>
-        </div>
+        <div id="eventsContainer" class="space-y-3"><p class="text-center text-xs text-slate-500 py-6">Belum ada event mendatang.</p></div>
       </div>
     </section>
 
-    <!-- ================= TAB 4: AI MENTORING ASSISTANT ================= -->
+    <!-- TAB 4: AI MENTORING -->
     <section id="tabAI" class="tab-content hidden space-y-4">
       <div class="glass-card p-5 rounded-3xl space-y-4 border border-cyan-500/30">
         <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
@@ -292,27 +223,396 @@
             <p class="text-[11px] text-slate-400">Diskusi materi tarbiyah, tazkiyatun nufus, atau fiqih harian</p>
           </div>
         </div>
-
         <div id="aiChatBox" class="h-80 overflow-y-auto space-y-3 p-3 bg-slate-950/80 rounded-2xl text-xs font-medium no-scrollbar border border-slate-800">
-          <div class="bg-slate-900 p-3 rounded-2xl max-w-[85%] text-slate-200 border border-white/5">
-            Assalamu'alaikum! Saya Asisten AI Lingkar Bertumbuh. Ada topik materi liqo, tazkiyatun nufus, atau kiat konsistensi amalan yang ingin dibahas? 🍃
-          </div>
+          <div class="bg-slate-900 p-3 rounded-2xl max-w-[85%] text-slate-200 border border-white/5">Assalamu'alaikum! Saya Asisten AI Lingkar Bertumbuh. Ada topik materi liqo atau kiat konsistensi amalan yang ingin dibahas? 🍃</div>
         </div>
-
         <div class="flex overflow-x-auto gap-2 no-scrollbar text-[10px] font-bold text-slate-300">
           <button onclick="askAITopic('Bagaimana tips istiqomah tilawah setengah juz setiap hari?')" class="bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-white/10 shrink-0">📖 Tips Tilawah ½ Juz</button>
           <button onclick="askAITopic('Berikan materi liqo tentang keutamaan shalat berjamaah di masjid')" class="bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-white/10 shrink-0">🕌 Keutamaan Jamaah</button>
           <button onclick="askAITopic('Jelaskan adab-adab penuntut ilmu menurut ulama')" class="bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-white/10 shrink-0">📚 Adab Penuntut Ilmu</button>
         </div>
-
         <div class="flex gap-2">
-          <input type="text" id="aiInput" placeholder="Ketik pertanyaan kamu di sini..." onkeypress="if(event.key==='Enter') sendAIChat()" class="w-full p-3 glass-input rounded-2xl text-xs font-bold text-white outline-none">
-          <button onclick="sendAIChat()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black px-5 rounded-2xl text-xs shrink-0 cursor-pointer transition">
-            <i class="fa-solid fa-paper-plane"></i>
-          </button>
+          <input type="text" id="aiInput" placeholder="Ketik pertanyaan kamu..." onkeypress="if(event.key==='Enter') sendAIChat()" class="w-full p-3 glass-input rounded-2xl text-xs font-bold text-white outline-none">
+          <button onclick="sendAIChat()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black px-5 rounded-2xl text-xs shrink-0 cursor-pointer"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
       </div>
     </section>
 
-    <!-- ================= TAB 5: PANEL KONTROL ADMIN (MURABBI) ================= -->
-    <section id="tabAdmin" class="tab-content hidden space-
+    <!-- TAB 5: ADMIN -->
+    <section id="tabAdmin" class="tab-content hidden space-y-5">
+      <div class="glass-card p-6 rounded-3xl border border-amber-500/30 space-y-5">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+          <h3 class="font-black text-sm text-amber-400 flex items-center gap-2"><i class="fa-solid fa-user-gear"></i> Panel Kontrol Murabbi</h3>
+          <span class="text-[10px] bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full font-black border border-amber-500/30">Mode Admin</span>
+        </div>
+        <div class="p-4 glass-input rounded-2xl space-y-3">
+          <h4 class="font-black text-xs text-amber-300 uppercase tracking-wider flex items-center gap-1.5"><i class="fa-solid fa-calendar-plus"></i> Tambah Event Liqo</h4>
+          <input type="text" id="eventJudul" placeholder="Judul Event..." class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white outline-none">
+          <input type="text" id="eventWaktu" placeholder="Tanggal & Waktu..." class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white outline-none">
+          <textarea id="eventKet" rows="2" placeholder="Keterangan..." class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white outline-none"></textarea>
+          <button onclick="simpanEventBaru()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl text-xs shadow-lg glow-gold"><i class="fa-solid fa-plus mr-1"></i> Terbitkan Event Baru</button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <button onclick="bukaTambahAnggotaModal()" class="w-full bg-slate-800 hover:bg-slate-700 py-3.5 rounded-2xl text-xs font-black text-brand-400 border border-brand-500/30 flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-user-plus"></i> Tambah Anggota Manual</button>
+          <button onclick="resetToDefaultData()" class="w-full bg-rose-950/60 hover:bg-rose-900 py-3.5 rounded-2xl text-xs font-black text-rose-300 border border-rose-500/30 flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-rotate-left"></i> Reset Seluruh Data</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <!-- MODAL EDIT DATA -->
+  <div id="editModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card w-full max-w-lg rounded-3xl p-6 border border-amber-500/30 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="font-black text-sm text-amber-400 flex items-center gap-2"><i class="fa-solid fa-pen-to-square"></i> Edit Data Mutabaah Anggota</h3>
+        <button onclick="closeEditModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <input type="hidden" id="editIndex">
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Nama Anggota:</label>
+          <input type="text" id="editNama" class="w-full p-3 glass-input rounded-xl text-white font-bold outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Pekan Mentoring:</label>
+          <select id="editPekan" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-white font-bold outline-none">
+            <option value="Pekan 1">Pekan 1</option>
+            <option value="Pekan 2">Pekan 2</option>
+            <option value="Pekan 3">Pekan 3</option>
+            <option value="Pekan 4">Pekan 4</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">Total Poin:</label>
+          <input type="number" id="editPoin" class="w-full p-3 glass-input rounded-xl text-amber-400 font-black outline-none">
+        </div>
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button onclick="closeEditModal()" class="w-1/2 bg-slate-800 text-slate-300 font-bold py-3 rounded-xl text-xs">Batal</button>
+        <button onclick="saveEditData()" class="w-1/2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl text-xs shadow-lg glow-gold">Simpan Perubahan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    let isAdmin = false;
+
+    function sanitize(str) {
+      if(!str) return '';
+      return String(str).replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+      });
+    }
+
+    const defaultData = [
+      { Nama: "Faris Audah", Pekan: "Pekan 1", Total_Poin: 155 },
+      { Nama: "Irvan Refliandi", Pekan: "Pekan 1", Total_Poin: 130 },
+      { Nama: "Muhammad Fikri", Pekan: "Pekan 1", Total_Poin: 110 }
+    ];
+
+    const defaultEvents = [
+      { judul: "Mentoring Pekanan & Evaluasi Target", waktu: "Sabtu Ini - 16.00 WIB", ket: "Lokasi di Masjid Kampus. Wajib membawa Al-Qur'an." }
+    ];
+
+    let globalData = [];
+    let globalEvents = [];
+
+    function showToast(msg, type = 'success') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      const bg = type === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
+      toast.className = `${bg} text-white text-xs font-bold px-4 py-3 rounded-2xl shadow-2xl flex items-center justify-between transition-all pointer-events-auto`;
+      toast.innerHTML = `<span>${sanitize(msg)}</span><button onclick="this.parentElement.remove()" class="ml-3"><i class="fa-solid fa-xmark"></i></button>`;
+      container.appendChild(toast);
+      setTimeout(() => { toast.remove(); }, 3500);
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab').forEach(el => {
+        el.classList.remove('border-brand-500', 'text-white');
+        el.classList.add('border-transparent');
+      });
+      document.getElementById(tabId).classList.remove('hidden');
+      const btn = document.getElementById(`nav-${tabId}`);
+      if(btn) {
+        btn.classList.remove('border-transparent');
+        btn.classList.add('border-brand-500', 'text-white');
+      }
+    }
+
+    function handleAdminToggle() {
+      if(!isAdmin) {
+        const pass = prompt("Masukkan PIN Admin Murabbi:");
+        if(pass === "1234" || pass === "admin") {
+          isAdmin = true;
+          document.getElementById('roleBadge').textContent = "👑 Murabbi (Admin)";
+          document.getElementById('btnAdminText').textContent = "Keluar Admin";
+          document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+          renderLeaderboard();
+          renderEvents();
+          showToast("Akses Admin Diterima!");
+        } else if(pass !== null) {
+          showToast("PIN Admin Salah!", "error");
+        }
+      } else {
+        isAdmin = false;
+        document.getElementById('roleBadge').textContent = "👤 Anggota";
+        document.getElementById('btnAdminText').textContent = "Admin";
+        document.querySelectorAll('.admin-only').forEach(el => el.classList.add('hidden'));
+        renderLeaderboard();
+        renderEvents();
+        switchTab('tabLeaderboard');
+        showToast("Keluar dari Mode Admin");
+      }
+    }
+
+    function updateLiveScore() {
+      const statusMentoring = document.getElementById('statusMentoring').value;
+      const pointsMentoring = statusMentoring === 'Hadir' ? 20 : (statusMentoring === 'Izin' ? 10 : 0);
+
+      const tilawah = parseFloat(document.getElementById('tilawahJuz').value) || 0;
+      const sholat = parseInt(document.getElementById('sholat5Waktu').value) || 0;
+      const rawatib = parseInt(document.getElementById('rawatibHari').value) || 0;
+      const tahajud = parseInt(document.getElementById('tahajudHari').value) || 0;
+      const dhuha = parseInt(document.getElementById('dhuhaHari').value) || 0;
+
+      const total = Math.round(pointsMentoring + (tilawah * 20) + (sholat * 2) + (rawatib * 5) + (tahajud * 15) + (dhuha * 10));
+      document.getElementById('liveCalculatedScore').innerHTML = `${total} <span class="text-xs text-slate-300 font-bold">pts</span>`;
+      return total;
+    }
+
+    function loadStorage() {
+      const stored = localStorage.getItem('lingkar_data_store');
+      if(stored) globalData = JSON.parse(stored);
+      else {
+        globalData = defaultData;
+        localStorage.setItem('lingkar_data_store', JSON.stringify(globalData));
+      }
+
+      const storedEvents = localStorage.getItem('lingkar_events_store');
+      if(storedEvents) globalEvents = JSON.parse(storedEvents);
+      else {
+        globalEvents = defaultEvents;
+        localStorage.setItem('lingkar_events_store', JSON.stringify(globalEvents));
+      }
+
+      globalData.sort((a,b) => Number(b.Total_Poin) - Number(a.Total_Poin));
+      renderLeaderboard();
+      renderEvents();
+    }
+
+    function renderLeaderboard() {
+      const podium = document.getElementById('podiumSection');
+      const list = document.getElementById('rankingList');
+
+      if(!globalData.length) {
+        podium.innerHTML = '';
+        list.innerHTML = `<p class="text-center text-xs text-slate-500 py-6">Belum ada data klasemen.</p>`;
+        return;
+      }
+
+      const t1 = globalData[0], t2 = globalData[1], t3 = globalData[2];
+
+      podium.innerHTML = `
+        <div class="glass-card border-slate-300/30 rounded-2xl p-3 text-center flex flex-col items-center relative order-1">
+          <div class="w-7 h-7 rounded-full bg-slate-300 text-slate-950 font-black text-xs flex items-center justify-center -mt-6 mb-1 shadow">2</div>
+          <p class="text-xs font-black text-slate-200 truncate w-full">${t2 ? sanitize(t2.Nama) : '-'}</p>
+          <p class="text-xs font-black text-brand-400 mt-1">${t2 ? t2.Total_Poin : 0} <span class="text-[9px] text-slate-400 font-normal">pt</span></p>
+        </div>
+        <div class="glass-card border-amber-500/50 rounded-2xl p-3.5 text-center flex flex-col items-center relative order-2 -translate-y-4 glow-gold">
+          <div class="w-8 h-8 rounded-full bg-amber-400 text-slate-950 font-black text-sm flex items-center justify-center -mt-7 mb-1 shadow-lg">👑</div>
+          <p class="text-xs font-black text-amber-300 truncate w-full">${t1 ? sanitize(t1.Nama) : '-'}</p>
+          <p class="text-sm font-black text-brand-400 mt-1">${t1 ? t1.Total_Poin : 0} <span class="text-[9px] text-slate-400 font-normal">pt</span></p>
+        </div>
+        <div class="glass-card border-amber-700/30 rounded-2xl p-3 text-center flex flex-col items-center relative order-3">
+          <div class="w-7 h-7 rounded-full bg-amber-700 text-white font-black text-xs flex items-center justify-center -mt-6 mb-1 shadow">3</div>
+          <p class="text-xs font-black text-slate-200 truncate w-full">${t3 ? sanitize(t3.Nama) : '-'}</p>
+          <p class="text-xs font-black text-brand-400 mt-1">${t3 ? t3.Total_Poin : 0} <span class="text-[9px] text-slate-400 font-normal">pt</span></p>
+        </div>
+      `;
+
+      let html = '';
+      globalData.forEach((item, idx) => {
+        const adminBtn = isAdmin ? `
+          <div class="flex items-center gap-1.5 ml-2">
+            <button onclick="openEditModal(${idx})" class="p-1.5 bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 rounded-lg text-xs transition"><i class="fa-solid fa-pen"></i></button>
+            <button onclick="deleteData(${idx})" class="p-1.5 bg-rose-500/20 hover:bg-rose-500/40 text-rose-300 rounded-lg text-xs transition"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        ` : '';
+
+        html += `
+          <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between gap-3 hover:border-brand-500/40 transition">
+            <div class="flex items-center gap-3 truncate">
+              <span class="w-6 text-center text-xs font-bold text-slate-500">#${idx + 1}</span>
+              <div class="truncate">
+                <p class="font-bold text-xs text-white truncate">${sanitize(item.Nama)}</p>
+                <p class="text-[10px] text-slate-400 mt-0.5 truncate">${sanitize(item.Pekan || 'Pekan Ini')}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-brand-400 font-extrabold text-sm">${item.Total_Poin} pts</span>
+              ${adminBtn}
+            </div>
+          </div>
+        `;
+      });
+      list.innerHTML = html;
+    }
+
+    function renderEvents() {
+      const container = document.getElementById('eventsContainer');
+      if(!globalEvents.length) {
+        container.innerHTML = `<p class="text-center text-xs text-slate-500 py-6">Belum ada event mendatang.</p>`;
+        return;
+      }
+      let html = '';
+      globalEvents.forEach((ev, idx) => {
+        const delBtn = isAdmin ? `<button onclick="hapusEvent(${idx})" class="text-rose-400 hover:text-rose-300 text-xs ml-2"><i class="fa-solid fa-trash"></i></button>` : '';
+        html += `
+          <div class="p-4 glass-input rounded-2xl space-y-1">
+            <div class="flex justify-between items-start">
+              <h4 class="font-bold text-xs text-amber-300">${sanitize(ev.judul)}</h4>
+              ${delBtn}
+            </div>
+            <p class="text-[11px] text-slate-400 font-medium"><i class="fa-regular fa-clock mr-1"></i> ${sanitize(ev.waktu)}</p>
+            <p class="text-xs text-slate-200 mt-1">${sanitize(ev.ket)}</p>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function saveMutabaah(e) {
+      e.preventDefault();
+      const nama = document.getElementById('userNamaInput').value.trim();
+      if(!nama) return showToast("Isi nama kamu dulu!", "error");
+
+      const totalPoin = updateLiveScore();
+      const pekan = document.getElementById('inputPekan').value;
+
+      globalData.push({ Nama: nama, Pekan: pekan, Total_Poin: totalPoin });
+      globalData.sort((a,b) => Number(b.Total_Poin) - Number(a.Total_Poin));
+      localStorage.setItem('lingkar_data_store', JSON.stringify(globalData));
+
+      if (window.confetti) confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 } });
+
+      showToast("Mutabaah berhasil disimpan!");
+      document.getElementById('mutabaahForm').reset();
+      switchTab('tabLeaderboard');
+      renderLeaderboard();
+    }
+
+    function askAITopic(q) {
+      document.getElementById('aiInput').value = q;
+      sendAIChat();
+    }
+
+    function sendAIChat() {
+      const input = document.getElementById('aiInput');
+      const text = input.value.trim();
+      if(!text) return;
+
+      const chatBox = document.getElementById('aiChatBox');
+      chatBox.innerHTML += `<div class="flex justify-end"><div class="bg-brand-600 text-slate-950 p-3 rounded-2xl max-w-[85%] font-bold">${sanitize(text)}</div></div>`;
+      input.value = '';
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      setTimeout(() => {
+        let reply = "Masya Allah! Tetap istiqomah dalam menuntut ilmu dan mengamalkan amalan yaumiyah. Diskusikan juga poin ini bersama Murabbi Rio Friyadi saat agenda liqo pekanan. 🍃";
+        if(text.toLowerCase().includes('tilawah')) {
+          reply = "<b>📖 Kiat Tilawah ½ Juz Per Hari:</b><br>Cukup baca 1 lembar Al-Qur'an setiap selesai shalat fardhu. Sangat ringan dan target ½ juz per hari pasti tercapai!";
+        } else if(text.toLowerCase().includes('jamaah')) {
+          reply = "<b>🕌 Keutamaan Shalat Berjamaah:</b><br>Pahalanya dilipatgandakan hingga 27 derajat dibanding shalat sendirian (HR. Bukhari & Muslim).";
+        }
+        chatBox.innerHTML += `<div class="bg-slate-900 p-3 rounded-2xl max-w-[85%] text-slate-200 border border-white/5">${reply}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, 1000);
+    }
+
+    function simpanEventBaru() {
+      const j = document.getElementById('eventJudul').value.trim();
+      const w = document.getElementById('eventWaktu').value.trim();
+      const k = document.getElementById('eventKet').value.trim();
+
+      if(!j || !w) return showToast("Judul dan waktu event wajib diisi!", "error");
+
+      globalEvents.push({ judul: j, waktu: w, ket: k });
+      localStorage.setItem('lingkar_events_store', JSON.stringify(globalEvents));
+      renderEvents();
+
+      document.getElementById('eventJudul').value = '';
+      document.getElementById('eventWaktu').value = '';
+      document.getElementById('eventKet').value = '';
+      showToast("Event baru berhasil diterbitkan!");
+    }
+
+    function hapusEvent(idx) {
+      if(!confirm("Hapus event ini?")) return;
+      globalEvents.splice(idx, 1);
+      localStorage.setItem('lingkar_events_store', JSON.stringify(globalEvents));
+      renderEvents();
+      showToast("Event berhasil dihapus.");
+    }
+
+    function openEditModal(idx) {
+      const item = globalData[idx];
+      if(!item) return;
+      document.getElementById('editIndex').value = idx;
+      document.getElementById('editNama').value = item.Nama || '';
+      document.getElementById('editPekan').value = item.Pekan || 'Pekan 1';
+      document.getElementById('editPoin').value = item.Total_Poin || 0;
+      document.getElementById('editModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').classList.add('hidden');
+    }
+
+    function saveEditData() {
+      const idx = document.getElementById('editIndex').value;
+      const nama = document.getElementById('editNama').value.trim();
+      const pekan = document.getElementById('editPekan').value;
+      const poin = Number(document.getElementById('editPoin').value);
+
+      globalData[idx] = { Nama: nama, Pekan: pekan, Total_Poin: poin };
+      globalData.sort((a,b) => Number(b.Total_Poin) - Number(a.Total_Poin));
+      localStorage.setItem('lingkar_data_store', JSON.stringify(globalData));
+
+      showToast("Data diperbarui!");
+      closeEditModal();
+      renderLeaderboard();
+    }
+
+    function deleteData(idx) {
+      if(!confirm("Hapus data anggota ini?")) return;
+      globalData.splice(idx, 1);
+      localStorage.setItem('lingkar_data_store', JSON.stringify(globalData));
+      renderLeaderboard();
+      showToast("Data dihapus!");
+    }
+
+    function bukaTambahAnggotaModal() {
+      const nama = prompt("Masukkan Nama Anggota Baru:");
+      if(nama && nama.trim() !== "") {
+        globalData.push({ Nama: nama.trim(), Pekan: "Pekan 1", Total_Poin: 0 });
+        localStorage.setItem('lingkar_data_store', JSON.stringify(globalData));
+        renderLeaderboard();
+        showToast("Anggota ditambahkan!");
+      }
+    }
+
+    function resetToDefaultData() {
+      if(confirm("Kembalikan seluruh data ke awal?")) {
+        localStorage.removeItem('lingkar_data_store');
+        localStorage.removeItem('lingkar_events_store');
+        loadStorage();
+        showToast("Sistem di-reset!");
+      }
+    }
+
+    window.onload = loadStorage;
+  </script>
+</body>
+</html>
