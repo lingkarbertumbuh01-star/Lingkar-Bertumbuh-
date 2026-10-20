@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lingkar Bertumbuh - Aplikasi Mutabaah & Mentoring</title>
+
+  <!-- Optimization for Mobile & PWA (Bisa di-install sebagai APK) -->
+  <meta name="theme-color" content="#030712">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Security & Antivirus Headers -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: {
+            brand: {
+              400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #030712; -webkit-tap-highlight-color: transparent; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .glass-card { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-input { background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.12); }
+    .glass-input:focus { border-color: #10b981; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
+    .glow-gold { box-shadow: 0 0 30px -5px rgba(245, 158, 11, 0.35); }
+    .glow-emerald { box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.35); }
+    .glow-cyan { box-shadow: 0 10px 30px -5px rgba(6, 182, 212, 0.35); }
+  </style>
+</head>
+<body class="text-slate-100 min-h-screen pb-28 relative selection:bg-brand-500 selection:text-white">
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="fixed top-5 right-4 left-4 md:left-auto md:w-96 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+  <!-- HEADER NAVBAR -->
+  <header class="sticky top-0 z-40 glass-card border-b border-white/10 text-white">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-teal-400 flex items-center justify-center font-black text-xl shadow-lg glow-emerald border border-brand-400/40 shrink-0">
+          🌱
+        </div>
+        <div class="truncate">
+          <h1 class="font-black text-base md:text-lg leading-tight truncate text-slate-100 tracking-tight">Lingkar Bertumbuh</h1>
+          <p class="text-[11px] text-slate-400 truncate flex items-center gap-1.5 font-medium">
+            <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span> Murabbi: <span class="font-bold text-brand-400">Rio Friyadi</span>
+          </p>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <span id="roleBadge" class="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-extrabold px-3 py-1.5 rounded-xl bg-slate-900 text-slate-300 border border-slate-700">
+          👤 Anggota
+        </span>
+        <button onclick="handleAdminToggle()" id="btnSwitchAdmin" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl shadow-lg glow-gold transition flex items-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-shield-halved text-xs"></i> <span id="btnAdminText">Admin</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TABS NAVIGATION -->
+    <div class="bg-slate-950/90 border-t border-white/5">
+      <div class="max-w-4xl mx-auto px-2 flex overflow-x-auto text-xs font-bold text-slate-400 no-scrollbar">
+        <button onclick="switchTab('tabLeaderboard')" id="nav-tabLeaderboard" class="nav-tab px-4 py-3 border-b-2 border-brand-500 text-white flex items-center gap-2 whitespace-nowrap transition-all">
+          <i class="fa-solid fa-trophy text-amber-400"></i> Leaderboard
+        </button>
+        <button onclick="switchTab('tabForm')" id="nav-tabForm" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all">
+          <i class="fa-solid fa-pen-to-square text-brand-400"></i> Input Mutabaah
+        </button>
+        <button onclick="switchTab('tabEvents')" id="nav-tabEvents" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all">
+          <i class="fa-solid fa-calendar-star text-amber-300"></i> Event Liqo
+        </button>
+        <button onclick="switchTab('tabAI')" id="nav-tabAI" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all">
+          <i class="fa-solid fa-robot text-cyan-400"></i> AI Mentoring
+        </button>
+        <button onclick="switchTab('tabAdmin')" id="nav-tabAdmin" class="nav-tab px-4 py-3 border-b-2 border-transparent hover:text-white flex items-center gap-2 whitespace-nowrap transition-all hidden admin-only">
+          <i class="fa-solid fa-sliders text-amber-400"></i> Panel Admin
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 mt-5 space-y-6">
+
+    <!-- SECURITY & STORAGE STATUS BAR -->
+    <div class="p-3.5 glass-card rounded-2xl shadow-xl flex items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2.5 text-slate-300 font-semibold truncate">
+        <span class="relative flex h-2.5 w-2.5 shrink-0">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
+        </span>
+        <span class="truncate text-slate-200">Sistem Internal Storage: <span class="text-brand-400 font-bold">Aktif & Aman dari Virus</span></span>
+      </div>
+      <span class="text-[10px] bg-emerald-500/10 text-emerald-300 px-3 py-1 rounded-xl border border-emerald-500/20 font-bold shrink-0">Auto-Encrypted</span>
+    </div>
+
+    <!-- ================= TAB 1: KLASEMEN LEADERBOARD & PODIUM ================= -->
+    <section id="tabLeaderboard" class="tab-content space-y-6">
+      <div class="glass-card p-5 md:p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+        
+        <div class="text-center max-w-md mx-auto mb-8">
+          <span class="bg-amber-500/10 text-amber-400 text-[11px] font-black px-4 py-1.5 rounded-full border border-amber-500/20 inline-block mb-2 uppercase tracking-wider">
+            ✨ Fastabiqul Khairat
+          </span>
+          <h2 class="text-2xl md:text-3xl font-black text-white tracking-tight">Klasemen Pekanan</h2>
+          <p class="text-xs text-slate-400 mt-1.5 font-medium">Peringkat Amalan Yaumiyah & Presensi Lingkar Bertumbuh</p>
+        </div>
+
+        <!-- PODIUM TOP 3 -->
+        <div id="podiumSection" class="grid grid-cols-3 gap-2.5 md:gap-5 mb-8 items-end min-h-[200px]"></div>
+
+        <!-- BADGES LEGEND -->
+        <div class="p-3.5 glass-input rounded-2xl mb-6 flex flex-wrap items-center justify-center gap-2.5 text-[10px] font-extrabold text-slate-300">
+          <span class="flex items-center gap-1 bg-amber-500/10 text-amber-300 border border-amber-500/20 px-2.5 py-1 rounded-xl">🌟 Istiqomah (&gt;100pt)</span>
+          <span class="flex items-center gap-1 bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-2.5 py-1 rounded-xl">🕌 Pejuang Masjid</span>
+          <span class="flex items-center gap-1 bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 px-2.5 py-1 rounded-xl">📖 Hafiz ½ Juz</span>
+        </div>
+
+        <!-- RANKINGS LIST -->
+        <div class="space-y-3" id="rankingList"></div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: INPUT MUTABAAH YAUMI & ABSENSI ================= -->
+    <section id="tabForm" class="tab-content hidden space-y-5">
+      
+      <div class="glass-card p-5 rounded-3xl shadow-xl flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="w-full md:w-2/3 space-y-1.5">
+          <label class="block text-[11px] font-black uppercase tracking-wider text-brand-400">Nama Lengkap Anggota:</label>
+          <input type="text" id="userNamaInput" placeholder="Ketik nama kamu di sini..." oninput="updateLiveScore()" class="w-full p-3.5 glass-input rounded-2xl font-bold text-slate-100 text-sm outline-none">
+        </div>
+        <div class="w-full md:w-1/3 bg-gradient-to-br from-slate-900 via-slate-950 to-brand-950/40 p-4 rounded-2xl text-center border border-brand-500/30 shadow-lg glow-emerald">
+          <p class="text-[10px] uppercase font-black text-slate-400 tracking-wider">Total Poin Terhitung</p>
+          <p id="liveCalculatedScore" class="text-3xl font-black text-brand-400 mt-0.5">0 <span class="text-xs text-slate-300 font-bold">pts</span></p>
+        </div>
+      </div>
+
+      <form id="mutabaahForm" onsubmit="saveMutabaah(event)" class="space-y-5">
+        
+        <!-- ABSENSI MENTORING -->
+        <div class="glass-card p-5 md:p-6 rounded-3xl shadow-xl space-y-4 border-l-4 border-l-cyan-500">
+          <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+            <h3 class="font-black text-slate-100 text-sm flex items-center gap-2">
+              <i class="fa-solid fa-users text-cyan-400"></i> Absensi Mentoring Pekanan
+            </h3>
+            <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">Wajib Isi</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 glass-input rounded-2xl space-y-2">
+              <label class="font-bold text-xs text-slate-200 block">Pilih Pekan Mentoring:</label>
+              <select id="inputPekan" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs font-bold text-slate-100 outline-none cursor-pointer">
+                <option value="Pekan 1">Pekan 1</option>
+                <option value="Pekan 2">Pekan 2</option>
+                <option value="Pekan 3">Pekan 3</option>
+                <option value="Pekan 4">Pekan 4</option>
+              </select>
+            </div>
+
+            <div class="p-4 glass-input rounded-2xl space-y-2">
+              <label class="font-bold text-xs text-slate-200 block">Status Kehadiran Mentoring:</label>
+              <select id="statusMentoring" class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs font-bold text-slate-100 outline-none cursor-pointer">
+                <option value="Hadir">✅ Hadir Mentoring (+20 pt)</option>
+                <option value="Izin">🟡 Izin Syar'i (+10 pt)</option>
+                <option value="Alfa">❌ Alfa (0 pt)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- TARGET AMALAN YAUMIYAH -->
+        <div class="glass-card p-5 md:p-6 rounded-3xl shadow-xl space-y-4">
+          <div class="border-b border-slate-800 pb-3">
+            <h3 class="font-black text-slate-100 text-sm flex items-center gap-2">
+              <i class="fa-solid fa-kaaba text-brand-400"></i> Amalan Yaumiyah Pekanan
+            </h3>
+          </div>
+
+          <!-- Tilawah 1/2 Juz Perhari -->
+          <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <p class="font-bold text-sm text-slate-100">📖 Tilawah Al-Qur'an <span class="text-xs font-semibold text-brand-400">(+20 pt/juz)</span></p>
+              <p class="text-[11px] text-slate-400">Target Min: ½ Juz / hari (3.5 Juz / pekan)</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="number" step="0.5" id="tilawahJuz" placeholder="0" min="0" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <span class="text-xs font-bold text-slate-400">Juz</span>
+            </div>
+          </div>
+
+          <!-- Shalat 5 Waktu -->
+          <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <p class="font-bold text-sm text-slate-100">🕌 Shalat 5 Waktu Jamaah <span class="text-xs font-semibold text-brand-400">(+2 pt/waktu)</span></p>
+              <p class="text-[11px] text-slate-400">Target: 35 Waktu / pekan</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="number" id="sholat5Waktu" placeholder="0" min="0" max="35" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <span class="text-xs font-bold text-slate-400">Waktu</span>
+            </div>
+          </div>
+
+          <!-- Qobliyah & Ba'diyah -->
+          <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <p class="font-bold text-sm text-slate-100">✨ Shalat Sunnah Qobliyah & Ba'diyah <span class="text-xs font-semibold text-brand-400">(+5 pt/hari)</span></p>
+              <p class="text-[11px] text-slate-400">Shalat sunnah rawatib harian</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="number" id="rawatibHari" placeholder="0" min="0" max="7" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <span class="text-xs font-bold text-slate-400">Hari</span>
+            </div>
+          </div>
+
+          <!-- Tahajud 1x -->
+          <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <p class="font-bold text-sm text-slate-100">🌙 Shalat Tahajud (Minimal 1x Pekan Ini) <span class="text-xs font-semibold text-brand-400">(+15 pt/hari)</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="number" id="tahajudHari" placeholder="0" min="0" max="7" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <span class="text-xs font-bold text-slate-400">Hari</span>
+            </div>
+          </div>
+
+          <!-- Dhuha 2x -->
+          <div class="p-4 glass-input rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div>
+              <p class="font-bold text-sm text-slate-100">☀️ Shalat Dhuha (Minimal 2x Pekan Ini) <span class="text-xs font-semibold text-brand-400">(+10 pt/hari)</span></p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="number" id="dhuhaHari" placeholder="0" min="0" max="7" oninput="updateLiveScore()" class="w-24 p-2.5 bg-slate-950 border border-slate-700 rounded-xl font-black text-center text-sm text-white outline-none focus:border-brand-500">
+              <span class="text-xs font-bold text-slate-400">Hari</span>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="btnSaveMutabaah" class="w-full bg-gradient-to-r from-brand-600 via-emerald-500 to-teal-400 hover:opacity-95 active:scale-[0.98] text-slate-950 font-black py-4 px-6 rounded-2xl shadow-xl glow-emerald transition flex items-center justify-center gap-2 text-sm cursor-pointer">
+          <i class="fa-solid fa-cloud-arrow-up text-lg"></i> Simpan Mutabaah Pekan Ini
+        </button>
+
+      </form>
+    </section>
+
+    <!-- ================= TAB 3: KELOLA EVENT LIQO ================= -->
+    <section id="tabEvents" class="tab-content hidden space-y-5">
+      <div class="glass-card p-6 rounded-3xl space-y-4">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+          <div>
+            <h3 class="font-black text-sm text-amber-300 flex items-center gap-2">
+              <i class="fa-solid fa-bullhorn text-amber-400"></i> Jadwal & Event Liqo
+            </h3>
+            <p class="text-[11px] text-slate-400">Pengumuman agenda kegiatan Lingkar Bertumbuh</p>
+          </div>
+        </div>
+
+        <!-- LIST EVENT HASIL ADD ADMIN -->
+        <div id="eventsContainer" class="space-y-3">
+          <p class="text-center text-xs text-slate-500 py-6">Belum ada event mendatang.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 4: AI MENTORING ASSISTANT ================= -->
+    <section id="tabAI" class="tab-content hidden space-y-4">
+      <div class="glass-card p-5 rounded-3xl space-y-4 border border-cyan-500/30">
+        <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+          <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xl">🤖</div>
+          <div>
+            <h3 class="font-black text-sm text-white">Asisten AI Mentoring & Liqo</h3>
+            <p class="text-[11px] text-slate-400">Diskusi materi tarbiyah, tazkiyatun nufus, atau fiqih harian</p>
+          </div>
+        </div>
+
+        <div id="aiChatBox" class="h-80 overflow-y-auto space-y-3 p-3 bg-slate-950/80 rounded-2xl text-xs font-medium no-scrollbar border border-slate-800">
+          <div class="bg-slate-900 p-3 rounded-2xl max-w-[85%] text-slate-200 border border-white/5">
+            Assalamu'alaikum! Saya Asisten AI Lingkar Bertumbuh. Ada topik materi liqo, tazkiyatun nufus, atau kiat konsistensi amalan yang ingin dibahas? 🍃
+          </div>
+        </div>
+
+        <div class="flex overflow-x-auto gap-2 no-scrollbar text-[10px] font-bold text-slate-300">
+          <button onclick="askAITopic('Bagaimana tips istiqomah tilawah setengah juz setiap hari?')" class="bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-white/10 shrink-0">📖 Tips Tilawah ½ Juz</button>
+          <button onclick="askAITopic('Berikan materi liqo tentang keutamaan shalat berjamaah di masjid')" class="bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-white/10 shrink-0">🕌 Keutamaan Jamaah</button>
+          <button onclick="askAITopic('Jelaskan adab-adab penuntut ilmu menurut ulama')" class="bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-white/10 shrink-0">📚 Adab Penuntut Ilmu</button>
+        </div>
+
+        <div class="flex gap-2">
+          <input type="text" id="aiInput" placeholder="Ketik pertanyaan kamu di sini..." onkeypress="if(event.key==='Enter') sendAIChat()" class="w-full p-3 glass-input rounded-2xl text-xs font-bold text-white outline-none">
+          <button onclick="sendAIChat()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black px-5 rounded-2xl text-xs shrink-0 cursor-pointer transition">
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 5: PANEL KONTROL ADMIN (MURABBI) ================= -->
+    <section id="tabAdmin" class="tab-content hidden space-
